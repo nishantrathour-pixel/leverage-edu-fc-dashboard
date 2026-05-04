@@ -36,13 +36,12 @@ MUTED      = "#8B8FA8"
 CENTRE_COLORS = [BLUE, ORANGE, GREEN, PURPLE, TEAL, YELLOW]
 
 CHART_LAYOUT = dict(
+    
     plot_bgcolor=PLOT_BG,
     paper_bgcolor=CARD_BG,
     font=dict(color=TEXT_CLR, family="Arial"),
     margin=dict(t=40, b=40, l=10, r=10),
     legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=TEXT_CLR)),
-    xaxis=dict(gridcolor=GRID_CLR, zerolinecolor=GRID_CLR, color=TEXT_CLR),
-    yaxis=dict(gridcolor=GRID_CLR, zerolinecolor=GRID_CLR, color=TEXT_CLR),
 )
 
 # ── CSS ────────────────────────────────────────────────────────────────────
@@ -59,9 +58,9 @@ st.markdown("""
     text-align: center;
     margin-bottom: 8px;
   }
-  .kpi-label { font-size: 12px; color: #8B8FA8; font-weight: 600;
+  .kpi-label { font-size: 10px; color: #8B8FA8; font-weight: 600;
                text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
-  .kpi-value { font-size: 26px; font-weight: 800; color: #FAFAFA; }
+  .kpi-value { font-size: 15px; font-weight: 800; color: #FAFAFA; white-space: nowrap; }
   .kpi-sub   { font-size: 12px; margin-top: 4px; }
   .kpi-pos   { color: #00C48C; }
   .kpi-neg   { color: #FF4B4B; }
@@ -244,11 +243,11 @@ if page == pages[0]:
     ))
     fig.update_layout(
         **CHART_LAYOUT, height=380, barmode="stack",
-        yaxis=dict(title="Revenue (₹)", gridcolor=GRID_CLR, tickprefix="₹", tickformat=","),
+        yaxis=dark_axis({"title":"Revenue (₹)","tickprefix":"₹","tickformat":","}),
         yaxis2=dict(title="Monthly Total", overlaying="y", side="right",
-                    gridcolor=GRID_CLR, tickprefix="₹", tickformat=","),
+                    gridcolor=GRID_CLR, tickprefix="₹", tickformat=",", color=TEXT_CLR),
         legend=dict(orientation="h", y=1.08, bgcolor="rgba(0,0,0,0)"),
-        xaxis=dict(tickangle=-30),
+        xaxis=dark_axis({"tickangle":-30}),
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -287,9 +286,9 @@ if page == pages[0]:
         ))
         fig2.update_layout(
             **CHART_LAYOUT, height=360, barmode="group",
-            yaxis=dict(title="₹ Revenue / Cost", tickprefix="₹", tickformat=",", gridcolor=GRID_CLR),
+            yaxis=dark_axis({"title":"₹ Revenue / Cost","tickprefix":"₹","tickformat":","}),
             yaxis2=dict(title="GM %", overlaying="y", side="right",
-                        ticksuffix="%", gridcolor=GRID_CLR, range=[90, 102]),
+                        ticksuffix="%", color=TEXT_CLR, range=[90, 102]),
             legend=dict(orientation="h", y=1.08, bgcolor="rgba(0,0,0,0)"),
         )
         st.plotly_chart(fig2, use_container_width=True)
@@ -399,8 +398,8 @@ elif page == pages[1]:
             textposition="outside", textfont=dict(color=TEXT_CLR),
         ))
         fig.update_layout(**CHART_LAYOUT, height=300, showlegend=False,
-                          yaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR),
-                          xaxis=dict(gridcolor=GRID_CLR))
+                          yaxis=dark_axis({"tickprefix":"₹","tickformat":","}),
+                          xaxis=dark_axis())
         st.plotly_chart(fig, use_container_width=True)
 
         ctr_day["Revenue"] = ctr_day["Revenue"].apply(inr_full)
@@ -421,7 +420,7 @@ elif page == pages[1]:
                       text=svc_day["Revenue"].apply(inr_full))
         fig2.update_traces(textposition="outside", textfont=dict(color=TEXT_CLR))
         fig2.update_layout(**CHART_LAYOUT, height=320, showlegend=False,
-                           xaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR))
+                           xaxis=dark_axis({"tickprefix":"₹","tickformat":","}))
         st.plotly_chart(fig2, use_container_width=True)
 
         svc_day["Revenue"]    = svc_day["Revenue"].apply(inr_full)
@@ -477,7 +476,7 @@ elif page == pages[2]:
                      text=ctr_mtd["MTD_Revenue"].apply(inr_full))
         fig.update_traces(textposition="outside", textfont=dict(color=TEXT_CLR))
         fig.update_layout(**CHART_LAYOUT, height=300, showlegend=False,
-                          xaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR))
+                          xaxis=dark_axis({"tickprefix":"₹","tickformat":","}))
         st.plotly_chart(fig, use_container_width=True)
 
         disp = ctr_mtd[["centre","MTD_Revenue_disp","Daily Avg"]].copy()
@@ -509,9 +508,9 @@ elif page == pages[2]:
         fig2.update_layout(**CHART_LAYOUT, height=380,
                            legend=dict(orientation="h", y=1.08, bgcolor="rgba(0,0,0,0)"))
         fig2.update_yaxes(title_text="Daily Revenue (₹)", tickprefix="₹",
-                          tickformat=",", gridcolor=GRID_CLR, secondary_y=False)
+                          tickformat=",", gridcolor=GRID_CLR, color=TEXT_CLR, secondary_y=False)
         fig2.update_yaxes(title_text="Cumulative (₹)", tickprefix="₹",
-                          tickformat=",", gridcolor=GRID_CLR, secondary_y=True)
+                          tickformat=",", gridcolor=GRID_CLR, color=TEXT_CLR, secondary_y=True)
         st.plotly_chart(fig2, use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -542,7 +541,7 @@ elif page == pages[3]:
                 textposition="outside", textfont=dict(size=9, color=TEXT_CLR),
             ))
         fig.update_layout(**CHART_LAYOUT, height=380, barmode="group",
-                          yaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR),
+                          yaxis=dark_axis({"tickprefix":"₹","tickformat":","}),
                           legend=dict(orientation="h", y=1.08, bgcolor="rgba(0,0,0,0)"))
         st.plotly_chart(fig, use_container_width=True)
 
@@ -571,7 +570,7 @@ elif page == pages[3]:
             line=dict(color=GREEN, width=3, dash="dot"), marker=dict(size=12, color=GREEN),
         ))
         fig2.update_layout(**CHART_LAYOUT, height=380,
-                           yaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR),
+                           yaxis=dark_axis({"tickprefix":"₹","tickformat":","}),
                            legend=dict(orientation="h", y=1.08, bgcolor="rgba(0,0,0,0)"))
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -630,7 +629,7 @@ elif page == pages[4]:
                              marker_color=RED, text=[inr_full(v) for v in eff["cost_per_sqft"]],
                              textposition="outside", textfont=dict(color=TEXT_CLR)))
         fig.update_layout(**CHART_LAYOUT, height=340, barmode="group",
-                          yaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR))
+                          yaxis=dark_axis({"tickprefix":"₹","tickformat":","}))
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         fig2 = go.Figure()
@@ -642,7 +641,7 @@ elif page == pages[4]:
         fig2.add_hline(y=95, line_dash="dot", line_color=GREEN,
                        annotation_text="Target 95%", annotation_font_color=GREEN)
         fig2.update_layout(**CHART_LAYOUT, height=340,
-                           yaxis=dict(ticksuffix="%", gridcolor=GRID_CLR, range=[0,105]))
+                           yaxis=dark_axis({"ticksuffix":"%","range":[0,105]}))
         st.plotly_chart(fig2, use_container_width=True)
 
     section("2. Revenue Productivity per Centre", "📈")
@@ -659,7 +658,7 @@ elif page == pages[4]:
         fig.update_layout(**CHART_LAYOUT, height=260, showlegend=False,
                           title=dict(text=label, font=dict(size=12, color=TEXT_CLR)),
                           margin=dict(t=40, b=30, l=5, r=5),
-                          yaxis=dict(tickprefix="₹", tickformat=",", gridcolor=GRID_CLR))
+                          yaxis=dark_axis({"tickprefix":"₹","tickformat":","}))
         col.plotly_chart(fig, use_container_width=True)
 
     section("3. Actual vs Target Conversion Rates", "🎯")
@@ -680,7 +679,7 @@ elif page == pages[4]:
                               text=[f"{a*100:.1f}%" for a in actuals],
                               textposition="outside", textfont=dict(color=TEXT_CLR)))
         fig3.update_layout(**CHART_LAYOUT, height=340, barmode="group",
-                           yaxis=dict(ticksuffix="%", gridcolor=GRID_CLR))
+                           yaxis=dark_axis({"ticksuffix":"%"}))
         st.plotly_chart(fig3, use_container_width=True)
 
     with col2:
